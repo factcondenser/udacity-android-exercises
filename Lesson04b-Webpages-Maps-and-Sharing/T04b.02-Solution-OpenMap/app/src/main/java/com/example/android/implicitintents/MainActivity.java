@@ -52,12 +52,13 @@ public class MainActivity extends AppCompatActivity {
         String addressString = "1600 Amphitheatre Parkway, CA";
 
         // COMPLETED (6) Use Uri.Builder with the appropriate scheme and query to form the Uri for the address
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("geo")
-                .path("0,0")
-                .query(addressString);
-        Uri addressUri = builder.build();
-
+        // ** DO NOT use Uri.Builder() here, since it only works for hierarchical URIs, not opaque ones
+        // Uri.Builder builder = new Uri.Builder();
+        // builder.scheme("geo")
+        // .path("0,0")
+        // .query(addressString);
+        // Uri addressUri = builder.build();
+        Uri addressUri = Uri.parse("geo:0,0?q=" + Uri.encode(addressString));
         // COMPLETED (7) Replace the Toast with a call to showMap, passing in the Uri from the previous step
         showMap(addressUri);
     }
@@ -77,9 +78,8 @@ public class MainActivity extends AppCompatActivity {
      * similar to what I've done above. You can view a list of implicit Intents on the Common
      * Intents page from the developer documentation.
      *
-     * @see <http://developer.android.com/guide/components/intents-common.html/>
-     *
      * @param v Button that was clicked.
+     * @see <http://developer.android.com/guide/components/intents-common.html/>
      */
     public void createYourOwn(View v) {
         Toast.makeText(this,
@@ -118,9 +118,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // COMPLETED (1) Create a method called showMap with a Uri as the single parameter
+
     /**
      * This method will fire off an implicit Intent to view a location on a map.
-     *
+     * <p>
      * When constructing implicit Intents, you can use either the setData method or specify the
      * URI as the second parameter of the Intent's constructor,
      * as I do in {@link #openWebPage(String)}
