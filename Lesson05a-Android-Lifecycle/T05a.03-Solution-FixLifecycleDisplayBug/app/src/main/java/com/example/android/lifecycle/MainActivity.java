@@ -50,10 +50,11 @@ public class MainActivity extends AppCompatActivity {
      */
 
     private static final ArrayList<String> mLifecycleCallbacks = new ArrayList<>();
+
     /**
      * Called when the activity is first created. This is where you should do all of your normal
      * static set up: create views, bind data to lists, etc.
-     *
+     * <p>
      * Always followed by onStart().
      *
      * @param savedInstanceState The Activity's previously frozen state, if there was one.
@@ -77,38 +78,38 @@ public class MainActivity extends AppCompatActivity {
                 String allPreviousLifecycleCallbacks = savedInstanceState
                         .getString(LIFECYCLE_CALLBACKS_TEXT_KEY);
                 mLifecycleDisplay.setText(allPreviousLifecycleCallbacks);
+
+                // COMPLETED (4) Iterate backwards through mLifecycleCallbacks, appending each String and a newline to mLifecycleDisplay
+                /*
+                * Since any updates to the UI we make after onSaveInstanceState (onStop, onDestroy, etc),
+                * we use an ArrayList to track if these lifecycle events had occurred. If any of them have
+                * occurred, we append their respective name to the TextView.
+                *
+                * The reason we iterate starting from the back of the ArrayList and ending in the front
+                * is that the most recent callbacks are inserted into the front of the ArrayList, so
+                * naturally the older callbacks are stored further back. We could have used a Queue to do
+                * this, but Java has strange API names for the Queue interface that we thought might be
+                * more confusing than this ArrayList solution.
+                */
+                for (int i = mLifecycleCallbacks.size() - 1; i >= 0; i--) {
+                    mLifecycleDisplay.append(mLifecycleCallbacks.get(i) + "\n");
+                }
+
+                // COMPLETED (5) Clear mLifecycleCallbacks after iterating through it
+                /*
+                * Once we've appended each callback from the ArrayList to the TextView, we need to clean
+                * the ArrayList so we don't get duplicate entries in the TextView.
+                */
+                mLifecycleCallbacks.clear();
             }
         }
-
-        // COMPLETED (4) Iterate backwards through mLifecycleCallbacks, appending each String and a newline to mLifecycleDisplay
-        /*
-         * Since any updates to the UI we make after onSaveInstanceState (onStop, onDestroy, etc),
-         * we use an ArrayList to track if these lifecycle events had occurred. If any of them have
-         * occurred, we append their respective name to the TextView.
-         *
-         * The reason we iterate starting from the back of the ArrayList and ending in the front
-         * is that the most recent callbacks are inserted into the front of the ArrayList, so
-         * naturally the older callbacks are stored further back. We could have used a Queue to do
-         * this, but Java has strange API names for the Queue interface that we thought might be
-         * more confusing than this ArrayList solution.
-         */
-        for (int i = mLifecycleCallbacks.size() - 1; i >= 0; i--) {
-            mLifecycleDisplay.append(mLifecycleCallbacks.get(i) + "\n");
-        }
-
-        // COMPLETED (5) Clear mLifecycleCallbacks after iterating through it
-        /*
-         * Once we've appended each callback from the ArrayList to the TextView, we need to clean
-         * the ArrayList so we don't get duplicate entries in the TextView.
-         */
-        mLifecycleCallbacks.clear();
 
         logAndAppend(ON_CREATE);
     }
 
     /**
      * Called when the activity is becoming visible to the user.
-     *
+     * <p>
      * Followed by onResume() if the activity comes to the foreground, or onStop() if it becomes
      * hidden.
      */
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called when the activity will start interacting with the user. At this point your activity
      * is at the top of the activity stack, with user input going to it.
-     *
+     * <p>
      * Always followed by onPause().
      */
     @Override
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
      * used to commit unsaved changes to persistent data, stop animations and other things that may
      * be consuming CPU, etc. Implementations of this method must be very quick because the next
      * activity will not be resumed until this method returns.
-     *
+     * <p>
      * Followed by either onResume() if the activity returns back to the front, or onStop() if it
      * becomes invisible to the user.
      */
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
      * resumed and is covering this one. This may happen either because a new activity is being
      * started, an existing one is being brought in front of this one, or this one is being
      * destroyed.
-     *
+     * <p>
      * Followed by either onRestart() if this activity is coming back to interact with the user, or
      * onDestroy() if this activity is going away.
      */
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Called after your activity has been stopped, prior to it being started again.
-     *
+     * <p>
      * Always followed by onStart()
      */
     @Override
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         logAndAppend(ON_RESTART);
     }
-    
+
     /**
      * The final call you receive before your activity is destroyed. This can happen either because
      * the activity is finishing (someone called finish() on it, or because the system is
